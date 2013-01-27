@@ -1,4 +1,22 @@
 enchant()
+
+Ranger = Class.create(Sprite,
+
+  initialize: ->
+
+    # Call superclass constructor
+    Sprite.apply this, [32, 36]
+    @image = Game.instance.assets['images/ranger_f.png']
+    @animationDuration = 0
+    @addEventListener Event.ENTER_FRAME, @updateAnimation
+
+  updateAnimation: (evt) ->
+    @animationDuration += evt.elapsed * 0.001
+    if @animationDuration >= 0.25
+      @frame = (@frame + 1) % 3
+      @animationDuration -= 0.25
+)
+
 game = new Game(320, 320)
 game.preload 'images/tankbrigade.png', 'images/ranger_f.png'
 game.onload = ->
@@ -19,17 +37,9 @@ game.onload = ->
   map.loadData mainMap
   scene.addChild map
 
-  sprite = new Sprite(32,36)
-  sprite.image = game.assets['images/ranger_f.png']
-  sprite.frame = 3
+  ranger = new Ranger()
 
-  scene.addChild sprite
-
-  game.addEventListener 'enterframe', ->
-    if sprite.frame == 3 and sprite.frame <= 5
-      sprite.frame += 1
-    else
-      sprite.frame = 3
+  scene.addChild ranger
 
   game.pushScene scene
 
